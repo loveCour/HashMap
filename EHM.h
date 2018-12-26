@@ -3,7 +3,7 @@
 extensible hash table는 데이터의 키의 해싱결과에 따라 저장되는 Bucket이 결정됩니다.
 해시 테이블의 디렉토리 레벨과 동일한 수의 비트를 synonym(해싱결과가 동일한 키)판단에 사용합니다.
 다시 말해 해싱결과를 해시 테이블의 레벨 만큼의 비트를 남기고(masking) 그 것이 같으면 synonym이라고 판단합니다.
-해시 테이블은 버켓들의 벡터이며, 각 버켓의 인덱스는 해싱결과를 masking한 결과입니다.
+해시 테이블은 버켓포인터들의 벡터이며, 각 버켓의 인덱스는 해싱결과를 masking한 결과입니다.
 
 만약 데이터 삽입 후, Bucket이 최대 크기를 초과하여 overflow가 발생하였다면,
 디렉토리 레벨을 늘리고, 오버플로가 발생한 버킷의 데이터들을 다시 해싱하여 synonym에 따라 데이터를 split합니다.
@@ -108,7 +108,7 @@ private:
 	int split(int dstIndex) {
 		EHMBucket* curBucket = HashTable[dstIndex];
 		int localLevel = curBucket->localLevel;
-		curBucket->localLevel++;//스플릿시 로컬레벨이 증가합니다.
+		curBucket->localLevel++;//스플릿 시 로컬레벨이 증가합니다.
 		EHMBucket* newBucket = new EHMBucket(localLevel+1, BUCKETSIZE);
 		curBucket->numOfSyn = 0;
 		for (int i = 0; i < BUCKETSIZE + 1; i++) {//오버플로시 bucketsize보다 1만큼 많은 데이터가 한 버켓에 들어있습니다.
